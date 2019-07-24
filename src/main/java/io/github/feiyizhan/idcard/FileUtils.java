@@ -6,9 +6,8 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 /**
+ * 文件工具类
  * @author 徐明龙 XuMingLong 2019-07-23
- * @program: id-validator
- * @description: 文件工具类
  **/
 public class FileUtils {
 

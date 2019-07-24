@@ -20,6 +20,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * 历史区域编码数据
+ * <p>
  * 行政区划代码（地址码）
  * 中华人民共和国民政部权威数据
  * <p>
@@ -29,8 +31,6 @@ import java.util.stream.Collectors;
  * <p>
  * Data Source: http://www.mca.gov.cn/article/sj/xzqh/
  * @author 徐明龙 XuMingLong 2019-07-23
- * @program: id-validator
- * @description: 历史区域编码数据
  **/
 @Log4j2
 public class HistoryZoneCodeData {

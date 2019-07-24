@@ -5,9 +5,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * 身份证号工具类测试代码
  * @author 徐明龙 XuMingLong 2019-07-23
  * @program: id-validator
- * @description: 身份证号工具类测试代码
  **/
 @Log4j2
 public class IdCardUtilsTests {

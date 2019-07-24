@@ -7,9 +7,8 @@ import static io.github.feiyizhan.idcard.data.CurrentZoneCodeData.CURRENT_ZONE_C
 import static io.github.feiyizhan.idcard.data.HistoryZoneCodeData.HISTORY_ZONE_CODE_MAP;
 
 /**
+ * 区域编码工具类
  * @author 徐明龙 XuMingLong 2019-07-23
- * @program: id-validator
- * @description: 区域编码工具类
  **/
 public class ZoneCodeUtils {
 

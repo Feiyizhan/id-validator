@@ -12,7 +12,7 @@ import java.util.TimeZone;
 
 /**
  *
- *
+ * 身份证工具类
  * 1、号码的结构
  * 公民身份号码是特征组合码，由十七位数字本体码和一位校验码组成。从左至右依次为：六位数字地址码，
  * 八位数字出生日期码，三位数字顺序码和一位数字校验码。
@@ -30,8 +30,6 @@ import java.util.TimeZone;
  * （3）通过模( 0 1 2 3 4 5 6 7 8 9 10)得到对应的校验码 Y:1 0 X 9 8 7 6 5 4 3 2
  *
  * @author 徐明龙 XuMingLong 2019-07-23
- * @program: id-validator
- * @description: 身份证工具类
  **/
 public class IdCardUtils {
 

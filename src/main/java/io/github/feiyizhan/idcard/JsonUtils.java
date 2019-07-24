@@ -16,8 +16,7 @@ import java.io.InputStream;
 /**
  * JSON Util类
  * 
- * @author 徐明龙 XuMingLong
- * @createDate 2018-04-03
+ * @author 徐明龙 XuMingLong 2018-04-03
  */
 @Log4j2
 public class JsonUtils {
@@ -34,12 +33,11 @@ public class JsonUtils {
 
 
     /**
-     * 转换对象为JSON字符串，失败返回空字符串。
+     * 转换对象为JSON字符串，失败返回空字符串。 2018-04-03
      * 
      * @author 徐明龙 XuMingLong
-     * @createDate 2018-04-03
      * @param obj
-     * @return
+     * @return java.lang.string
      */
     public static String objectToJson(Object obj) {
         try {
@@ -54,11 +52,10 @@ public class JsonUtils {
     /**
      * 转换JSON字符串为对象，失败返回null。
      * 
-     * @author 徐明龙 XuMingLong
-     * @createDate 2018-04-03
+     * @author 徐明龙 XuMingLong 2018-04-03
      * @param json
      * @param javaType
-     * @return
+     * @return T
      */
     public static <T> T JsonToObject(String json, TypeReference<T> javaType) {
         try {
@@ -80,11 +77,10 @@ public class JsonUtils {
     /**
      * 转换JSON字符串为对象，失败返回null。
      * 
-     * @author 徐明龙 XuMingLong
-     * @createDate 2018-04-03
+     * @author 徐明龙 XuMingLong 2018-04-03
      * @param json
      * @param javaType
-     * @return
+     * @return T
      */
     public static <T> T JsonToObject(InputStream json, TypeReference<T> javaType) {
         try {
