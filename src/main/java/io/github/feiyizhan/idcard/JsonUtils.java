@@ -36,7 +36,7 @@ public class JsonUtils {
      * 转换对象为JSON字符串，失败返回空字符串。 2018-04-03
      * 
      * @author 徐明龙 XuMingLong
-     * @param obj
+     * @param obj 待转换的对象
      * @return java.lang.string
      */
     public static String objectToJson(Object obj) {
@@ -53,8 +53,8 @@ public class JsonUtils {
      * 转换JSON字符串为对象，失败返回null。
      * 
      * @author 徐明龙 XuMingLong 2018-04-03
-     * @param json
-     * @param javaType
+     * @param json json字符串
+     * @param javaType 返回的对象类型描述
      * @return T
      */
     public static <T> T JsonToObject(String json, TypeReference<T> javaType) {
@@ -78,8 +78,8 @@ public class JsonUtils {
      * 转换JSON字符串为对象，失败返回null。
      * 
      * @author 徐明龙 XuMingLong 2018-04-03
-     * @param json
-     * @param javaType
+     * @param json json字符串
+     * @param javaType 返回的对象类型描述
      * @return T
      */
     public static <T> T JsonToObject(InputStream json, TypeReference<T> javaType) {

@@ -14,7 +14,7 @@ public class ChineseZodiacUtils {
     /**
      * 获取生肖
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param year
+     * @param year 四位数的年
      * @return java.lang.String
      */
     public static String getChineseZodiac(int year){

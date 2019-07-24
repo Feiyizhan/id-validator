@@ -34,12 +34,12 @@ public class ConstellationUtils {
 
 
     /**
-     * 获取比较器
+     * 获取比较器，支持12-20 ~ 01-19 格式的范围比较
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param begin
-     * @param end
-     * @param roundBegin
-     * @param roundEnd
+     * @param begin 范围的起始值
+     * @param end 范围的结束值
+     * @param roundBegin 环形数据的起始值
+     * @param roundEnd 环形数据的结束值
      * @return java.util.Comparator<T>
      */
     private static <T extends Comparable<? super T>> Comparator<T> getComparator(T begin,T end,T roundBegin,T roundEnd){
@@ -73,9 +73,9 @@ public class ConstellationUtils {
     }
 
     /**
-     * 根据月日获取星座信息，月日格式MM-dd
+     * 根据月日获取星座信息，
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param monthAndDay
+     * @param monthAndDay 月日格式MM-dd
      * @return java.lang.String
      */
     public static String getConstellationByMonthAndDay(String monthAndDay){

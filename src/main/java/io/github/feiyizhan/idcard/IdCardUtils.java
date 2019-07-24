@@ -57,7 +57,7 @@ public class IdCardUtils {
     /**
      * 获取身份证信息，如果身份证无效返回null
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param idCard
+     * @param idCard 身份证号码
      * @return io.github.feiyizhan.idcard.IdCardInfo
      */
     public static IdCardInfo getIdCardInfo(String idCard){
@@ -112,7 +112,7 @@ public class IdCardUtils {
     /**
      * 校验身份证号是否有效，支持15位和18位身份证
      * @author 徐明龙 XuMingLong 2019-07-23
-     * @param idCard
+     * @param idCard 身份证号码
      * @return boolean
      */
     public static boolean isValid(String idCard){
@@ -131,7 +131,7 @@ public class IdCardUtils {
     /**
      * 校验15位身份证号码
      * @author 徐明龙 XuMingLong 2019-07-23
-     * @param idCard
+     * @param idCard 身份证号码
      * @return boolean
      */
     private static boolean isValid_15(String idCard){
@@ -150,7 +150,7 @@ public class IdCardUtils {
     /**
      * 校验18位身份证号码
      * @author 徐明龙 XuMingLong 2019-07-23
-     * @param idCard
+     * @param idCard 身份证号码
      * @return boolean
      */
     private static boolean isValid_18(String idCard){
@@ -187,7 +187,7 @@ public class IdCardUtils {
     /**
      * 获取顺序码
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param idCard
+     * @param idCard 身份证号码
      * @return java.lang.String
      */
     private static String getSequenceCode(String idCard){
@@ -197,7 +197,7 @@ public class IdCardUtils {
     /**
      * 获取身份证上出生日期
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param idCard
+     * @param idCard 身份证号码
      * @return java.lang.String
      */
     private static String getBirthday(String idCard){
@@ -217,7 +217,7 @@ public class IdCardUtils {
     /**
      * 检查出生日期，校验日期,日期必须有效，且不能大于当天，不能小于1900-01-01
      * @author 徐明龙 XuMingLong 2019-07-23
-     * @param dateStr
+     * @param dateStr 出生日期字符串
      * @return boolean
      */
     private static boolean checkBirthDay(String dateStr){

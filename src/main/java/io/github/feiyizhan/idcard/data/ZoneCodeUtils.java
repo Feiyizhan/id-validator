@@ -15,9 +15,10 @@ public class ZoneCodeUtils {
 
     /**
      * 获取区域编码的描述,一个编号对应多个区域值时，取year在有效期范围内的值
-     * <br/> 如果year为null 取有效期最晚的。
+     * <p>
+     * 如果year为null 取有效期最晚的。
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param zoneCode
+     * @param zoneCode 区域编码
      * @param year 年
      * @return java.lang.String
      */
@@ -41,9 +42,9 @@ public class ZoneCodeUtils {
     /**
      * 获取区域的完整描述，一个编号对应多个区域值时，取year在有效期范围内的值
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param zoneCode
-     * @param year
-     * @param separator
+     * @param zoneCode 区域编码
+     * @param year 指定年份
+     * @param separator 分隔符
      * @return java.lang.String
      */
     public static String getZoneFullDescription(String zoneCode, Integer year, String separator) {
@@ -82,7 +83,7 @@ public class ZoneCodeUtils {
 
     /**
      * 获取区域编码的描述,一个编号对应多个区域值时，取有效期最晚的。
-     * @param zoneCode
+     * @param zoneCode 区域编码
      * @return java.lang.String
      * @author 徐明龙 XuMingLong 2019-07-23
      */
@@ -102,7 +103,7 @@ public class ZoneCodeUtils {
 
     /**
      * 判断区域编码是否存在
-     * @param zoneCode
+     * @param zoneCode 区域编码
      * @return boolean
      * @author 徐明龙 XuMingLong 2019-07-23
      */
@@ -118,7 +119,7 @@ public class ZoneCodeUtils {
     /**
      * 判断区域编码在当前区域编码表中存在
      * @author 徐明龙 XuMingLong 2019-07-24
-     * @param zoneCode
+     * @param zoneCode 区域编码
      * @return boolean
      */
     public static boolean isExistedInCurrent(String zoneCode){

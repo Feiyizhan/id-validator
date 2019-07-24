@@ -27,7 +27,8 @@ public class DateUtils {
     /**
      * 转换为日期对象，转换失败返回null
      * @author 徐明龙 XuMingLong 2019-07-23
-     * @param dateStr
+     * @param dateStr 日期字符串
+     * @param formatter 日期格式化器
      * @return java.time.LocalDate
      */
     public static LocalDate convertToDate(String dateStr,DateTimeFormatter formatter){
