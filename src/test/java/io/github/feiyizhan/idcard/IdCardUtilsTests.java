@@ -16,4 +16,9 @@ public class IdCardUtilsTests {
     public void testValidIdCard(){
         Assert.assertTrue(IdCardUtils.isValid("13053519860730352X"));
     }
+
+    @Test
+    public void testGetIdCardInfo(){
+        System.out.println(IdCardUtils.getIdCardInfo("13053519860730352X"));
+    }
 }

@@ -44,6 +44,76 @@ public class IdCardUtilsTests {
 ```
 
 ### 获取身份证号信息
+```java
+    @Test
+    public void testGetIdCardInfo(){
+        System.out.println(IdCardUtils.getIdCardInfo("13053519860730352X"));
+    }
+
+```
+
+返回结果：
+```java
+public class IdCardInfo {
+
+    /**
+     * 区域编码
+     */
+    private String zoneCode;
+
+    /**
+     * 地址码是否废弃，1 为废弃的，0 为正在使用的
+     */
+    private Boolean abandoned;
+
+    /**
+     * 地址，例如：广东省深圳市盐田区
+     */
+    private String address;
+
+    /**
+     * 省市区三级列表,例如： ["广东省", "深圳市", "盐田区"]
+     */
+    private List<String> addressList;
+
+    /**
+     * 出生日期，格式：yyyy-MM-dd,例如：1999-01-10
+     */
+    private String birthday;
+
+    /**
+     * 年龄
+     */
+    private Integer age;
+
+    /**
+     * 星座,例如：水瓶座
+     */
+    private String constellation;
+
+    /**
+     * 生肖,例如： 卯兔
+     */
+    private String chineseZodiac;
+
+    /**
+     * 性别，1 为男性，0 为女性
+     */
+    private Integer sex;
+
+    /**
+     * 号码长度, 15或18位
+     */
+    private Integer length;
+
+    /**
+     * 校验码
+     */
+    private String checkBit;
+
+}
+
+```
 
 
 > 注：判断地址码是否废弃的依据是[中华人民共和国行政区划代码历史数据集](https://github.com/jxlwqq/address-code-of-china)，本数据集的采集源来自：[中华人民共和国民政部](http://www.mca.gov.cn/article/sj/xzqh//1980/)，每年更新一次。本数据集采用 csv 格式存储，方便大家进行数据分析或者开发其他语言的版本。

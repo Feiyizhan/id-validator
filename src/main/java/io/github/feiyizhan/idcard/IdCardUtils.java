@@ -1,14 +1,15 @@
 package io.github.feiyizhan.idcard;
 
 import io.github.feiyizhan.idcard.data.ZoneCodeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+
+import static io.github.feiyizhan.idcard.DateUtils.*;
 
 /**
  *
@@ -45,18 +46,67 @@ public class IdCardUtils {
      */
     private final static char[] PARITY_BIT = {'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'};
 
-    /**
-     * 日期格式化器
-     * @author 徐明龙 XuMingLong 2019-07-23
-     */
-    private static final DateTimeFormatter DATE_FORMAT = new DateTimeFormatterBuilder().appendPattern("yyyyMMdd")
-        .toFormatter();
 
     /**
      * 身份证允许的最小日期
      * @author 徐明龙 XuMingLong 2019-07-23
      */
-    private static final LocalDate MIN_DATE = convertToDate("19000101");
+    private static final LocalDate MIN_DATE = convertToDate("19000101",DATE_FORMAT_1);
+
+
+    /**
+     * 获取身份证信息，如果身份证无效返回null
+     * @author 徐明龙 XuMingLong 2019-07-24
+     * @param idCard
+     * @return io.github.feiyizhan.idcard.IdCardInfo
+     */
+    public static IdCardInfo getIdCardInfo(String idCard){
+        if(!isValid(idCard)){
+            return null;
+        }
+        //获取长度
+        int length = idCard.length();
+        //获取出生日期
+        String birthdayStr = getBirthday(idCard);
+        //获取LocalDate 对象的出生日期
+        LocalDate birthday = convertToDate(birthdayStr, DATE_FORMAT_1);
+        //获取年龄
+        int age = (int)ChronoUnit.YEARS.between(birthday,getToday());
+        //获取区域编码
+        String zoneCode = idCard.substring(0, 6);
+        //获取区域信息
+        String address = ZoneCodeUtils.getZoneFullDescription(zoneCode,birthday.get(ChronoField.YEAR),"-");
+        List<String> addressList = Arrays.asList(StringUtils.split(address,"-"));
+        address = StringUtils.remove(address,"-");
+        //获取顺序码
+        String sequenceCode = getSequenceCode(idCard);
+        //获取性别
+        int sex = ~Integer.parseInt(sequenceCode)&1;
+        //获取生肖
+        String chineseZodiac = ChineseZodiacUtils.getChineseZodiac(birthday.get(ChronoField.YEAR));
+        //获取星座
+        String constellation = ConstellationUtils.getConstellationByMonthAndDay(birthdayStr.substring(4));
+        //获取校验码
+        String checkBit = idCard.substring(length-1).toUpperCase();
+        //判断是否废弃
+        boolean abandoned = !ZoneCodeUtils.isExistedInCurrent(zoneCode);
+        IdCardInfo info = IdCardInfo.builder()
+            .zoneCode(zoneCode)
+            .birthday(birthday.format(DATE_FORMAT_2))
+            .age(age)
+            .address(address)
+            .addressList(addressList)
+            .chineseZodiac(chineseZodiac)
+            .constellation(constellation)
+            .length(length)
+            .sex(sex)
+            .checkBit(checkBit)
+            .abandoned(abandoned)
+            .build();
+
+
+        return info;
+    }
 
 
     /**
@@ -91,7 +141,7 @@ public class IdCardUtils {
             return false;
         }
         //校验日期
-        if(!checkBirthDay(String.join("","19",idCard.substring(6, 12)))){
+        if(!checkBirthDay(getBirthday(idCard))){
             return false;
         }
         return true;
@@ -126,12 +176,32 @@ public class IdCardUtils {
         }
 
         //校验日期,日期必须有效，且不能大于当天，不能小于1900-01-01
-        if(!checkBirthDay(idCard.substring(6, 14))){
+        if(!checkBirthDay(getBirthday(idCard))){
             return false;
         }
 
         //校验"校验位"
         return idCardArray[idCardArray.length - 1] == PARITY_BIT[sumPower % 11];
+    }
+
+    /**
+     * 获取顺序码
+     * @author 徐明龙 XuMingLong 2019-07-24
+     * @param idCard
+     * @return java.lang.String
+     */
+    private static String getSequenceCode(String idCard){
+        return idCard.length()==18?idCard.substring(14, 17):idCard.substring(12);
+    }
+
+    /**
+     * 获取身份证上出生日期
+     * @author 徐明龙 XuMingLong 2019-07-24
+     * @param idCard
+     * @return java.lang.String
+     */
+    private static String getBirthday(String idCard){
+        return idCard.length()==18?idCard.substring(6, 14):String.join("","19",idCard.substring(6, 12));
     }
 
 
@@ -145,27 +215,13 @@ public class IdCardUtils {
     }
 
     /**
-     * 转换为日期对象，转换失败返回null
-     * @author 徐明龙 XuMingLong 2019-07-23
-     * @param dateStr
-     * @return java.time.LocalDate
-     */
-    private static LocalDate convertToDate(String dateStr){
-        try {
-            return LocalDate.parse(dateStr,DATE_FORMAT);
-        }catch (Exception e){
-            return null;
-        }
-    }
-
-    /**
      * 检查出生日期，校验日期,日期必须有效，且不能大于当天，不能小于1900-01-01
      * @author 徐明龙 XuMingLong 2019-07-23
      * @param dateStr
      * @return boolean
      */
     private static boolean checkBirthDay(String dateStr){
-        LocalDate date = convertToDate(dateStr);
+        LocalDate date = convertToDate(dateStr, DATE_FORMAT_1);
         return !(date==null|| date.isAfter(getToday()) || date.isBefore(MIN_DATE));
     }
 
@@ -186,6 +242,9 @@ public class IdCardUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println('0'-'0');
+        System.out.println(LocalDate.now().get(ChronoField.MONTH_OF_YEAR));
+        System.out.println(LocalDate.now().get(ChronoField.DAY_OF_MONTH));
+        System.out.println(LocalDate.now().get(ChronoField.DAY_OF_YEAR));
     }
+
 }
