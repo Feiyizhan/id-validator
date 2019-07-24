@@ -7,9 +7,9 @@
     <groupId>io.github.Feiyizhan</groupId>
     <artifactId>id-validator</artifactId>
     <version>1.0</version>
-    <name>enhanced.mybaits.generator</name>
+    <name>id-validator</name>
     <description>中华人民共和国居民身份证、中华人民共和国港澳居民居住证以及中华人民共和国台湾居民居住证号码验证工具</description>
-    <url>https://github.com/Feiyizhan/enhanced.mybaits.generator</url>
+    <url>https://github.com/Feiyizhan/id-validator</url>
     <properties>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.4</version>
+            <version>2.9.9.1</version>
         </dependency>
     </dependencies>
 
@@ -86,9 +86,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/Feiyizhan/enhanced.mybaits.generator.git</connection>
-        <developerConnection>scm:https://github.com/Feiyizhan/enhanced.mybaits.generator.git</developerConnection>
-        <url>https://github.com/Feiyizhan/enhanced.mybaits.generator.git</url>
+        <connection>scm:git:https://github.com/Feiyizhan/id-validator.git</connection>
+        <developerConnection>scm:https://github.com/Feiyizhan/id-validator.git</developerConnection>
+        <url>https://github.com/Feiyizhan/id-validator.git</url>
     </scm>
 
     <profiles>
