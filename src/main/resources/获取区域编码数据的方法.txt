@@ -1,0 +1,28 @@
+1.历史区域编码数据获取的方法
+1.1 下载https://github.com/jxlwqq/id-validator/blob/master/data/addressCodeTimeline.php 文件到本地
+1.2 替换文件中的所有"[" 为 "array("
+1.3 替换文件中的所有"]"为")"
+1.4 新建"test.php"文件，文件内容如下：
+<?php
+header('Content-Type: application/json;charset=utf-8');
+$x = include 'addressCodeTimeline.php';
+echo json_encode($x);
+?>
+
+1.5 将两个文件提交到可以执行PHP脚本的环境
+1.6 访问test.php文件，将获得的json内容保存到 "history_zone_code_data_yyyyMM.json"文件
+
+
+
+2.当前区域编码数据获取的方法
+2.1 下载 https://github.com/jxlwqq/id-validator/blob/master/data/addressCode.php
+2.2 替换文件中的所有"[" 为 "array("
+2.3 替换文件中的所有"]"为")"
+2.4 新建"test.php"文件，文件内容如下：
+<?php
+header('Content-Type: application/json;charset=utf-8');
+$x = include 'addressCode.php';
+echo json_encode($x);
+?>
+2.5 将两个文件提交到可以执行PHP脚本的环境
+2.6 访问test.php文件，将获得的json内容保存到 "current_zone_code_data_yyyyMM.json"文件
