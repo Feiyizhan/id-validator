@@ -73,8 +73,8 @@
 
     <licenses>
         <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
         </license>
     </licenses>
 
@@ -154,11 +154,4 @@
     </profiles>
 
 
-
-
-
-    <issueManagement>
-        <system>jira</system>
-        <url>https://issues.sonatype.org/browse/OSSRH-44374</url>
-    </issueManagement>
 </project>
