@@ -14,6 +14,6 @@ public class IdCardUtilsTests {
 
     @Test
     public void testValidIdCard(){
-        Assert.assertTrue(IdCardUtils.isValid("36232919880420423x"));
+        Assert.assertTrue(IdCardUtils.isValid("13053519860730352X"));
     }
 }
