@@ -81,7 +81,7 @@ public class IdCardUtils {
         //获取顺序码
         String sequenceCode = getSequenceCode(idCard);
         //获取性别
-        int sex = ~Integer.parseInt(sequenceCode)&1;
+        int sex = Integer.parseInt(sequenceCode)&1;
         //获取生肖
         String chineseZodiac = ChineseZodiacUtils.getChineseZodiac(birthday.get(ChronoField.YEAR));
         //获取星座
