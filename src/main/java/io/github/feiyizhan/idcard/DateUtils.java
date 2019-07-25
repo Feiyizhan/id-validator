@@ -51,11 +51,12 @@ public class DateUtils {
      * month 月,合法的值为1-12，默认或参数非法，则随机取1~12的月；
      * <p>
      * day 日,合法的值为1-31, 默认或参数非法，则随机取1~31的日；
-     * 如果是随机到的月或者指定的月为2月份：
      * <p>
-     *  1、如果没有指定日，则随机生成有效的2月份的日期
-     *  2、如果指定了日，但指定的日不是2月份有效的日期，则随机生成有效的2月份的日期
-     *  3、如果指定了日期，器指定的日是2月份有效的日期，使用该日期
+     *  1、如果随机到年月为本年月，且如果指定的日大于`当天`,则随机取1~`当天`的日;
+     * <p>
+     *  2、如果随机到的年月不是本年月，且如果指定的日大于`所在月的最后一天`,则随机取1~`所在月的最后一天`的日;
+     * <p>
+     *  3、否则使用指定的日；
      * @author 徐明龙 XuMingLong 2019-07-25
      * @param year 年
      * @param month 月
@@ -77,13 +78,18 @@ public class DateUtils {
                 month = RandomUtils.nextInt(1,13);
             }
         }
-        if(day==null || day<1 || day>31){
-            LocalDate date = LocalDate.of(year,month,1);
-            if(year==currentYear && month == currentMonth){
-                day = RandomUtils.nextInt(1,currentDay+1);
-            }else{
-                day = RandomUtils.nextInt(1,getLastDayForMonth(date).getDayOfMonth()+1);
-            }
+        //取本月最后一天
+        LocalDate lastDay = getLastDayForMonth(LocalDate.of(year,month,1));
+        //取有效的最后一天
+        int validLastDay = 0;
+        if(year==currentYear && month == currentMonth){
+            validLastDay = currentDay;
+        }else{
+            validLastDay = lastDay.getDayOfMonth();
+        }
+        //如果指定的day无效，则重新设置day
+        if(day==null || day<1 || day>validLastDay ){
+            day = RandomUtils.nextInt(1,validLastDay+1);
         }
         return LocalDate.of(year,month,day);
 

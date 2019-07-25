@@ -119,11 +119,158 @@ public class IdCardInfo {
 > 注：判断地址码是否废弃的依据是[中华人民共和国行政区划代码历史数据集](https://github.com/jxlwqq/address-code-of-china)，本数据集的采集源来自：[中华人民共和国民政部](http://www.mca.gov.cn/article/sj/xzqh//1980/)，每年更新一次。本数据集采用 csv 格式存储，方便大家进行数据分析或者开发其他语言的版本。
 ### 生成可通过校验的假数据
 伪造符合校验的身份证：
+参数说明：
+
+- `is18Bit` 是否生成 18 位号码，默认为`true`,`false`生成15位号码;
+
+- `address` 地址，即省市县三级地区官方全称，如北京市、台湾省、香港特别行政区、深圳市、黄浦区等，
+ 可以只提供省或者市，将会取省或市下随机的区县，默认或参数非法，则生成合法的随机地址；
+
+- `year` 出生日期-年，合法的值为1900~本年，默认或参数非法，则随机取1900~`本年`的年；
+
+- `month` 出生日期-月,合法的值为1-12，默认或参数非法，则随机取1~12的月；
+  如果是随机到的或指定的年份为本年，则随机取1~`本月`的月。
+  
+- `day` 出生日期-日,合法的值为1-31, 默认或参数非法，则随机取1~31的日；
+ 1. 如果随机到年月为本年月，且如果指定的日大于`当天`,则随机取1~`当天`的日；
+ 2. 如果随机到的年月不是本年月，且如果指定的日大于`所在月的最后一天`,则随机取1~`所在月的最后一天`的日;
+ 3. 否则使用指定的日；
+- `sex` 性别，`1`为男，`0`为女，默认或参数非法，则生成合法的随机性别；
+
+
+```java
+@Test
+    public void TestFakeId(){
+        //测试完全随机
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(null,null,null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+
+    }
+
+    @Test
+    public void TestFakeIdWith15Bit(){
+        //测试随机生成15位
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(false,null,null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+
+    @Test
+    public void TestFakeIdWithProvince(){
+        //测试随机生成指定省的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"广东省",null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+        //测试随机生成指定直辖市的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"上海市",null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+        //测试随机生成指定台湾
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"台湾省",null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+
+    @Test
+    public void TestFakeIdWithCity(){
+        //测试随机生成指定市的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"宁波市",null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+    @Test
+    public void TestFakeIdWithCounty(){
+        //测试随机生成指定直辖市区的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"静安区",null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+
+        //测试随机生成指定县的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"新丰县",null,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+
+    @Test
+    public void TestFakeIdWithYear(){
+        //测试随机生成指定直辖市区的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"静安区",2019,null,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+
+    @Test
+    public void TestFakeIdWithMonth(){
+        //测试随机生成指定直辖市区的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"静安区",2019,2,null,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+
+    @Test
+    public void TestFakeIdWithDay(){
+        //测试随机生成指定直辖市区的
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"静安区",2019,3,15,null);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+
+    @Test
+    public void TestFakeIdWithSex(){
+        //测试随机生成指定直辖市区的男性
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"静安区",2019,3,15,1);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+        //测试随机生成指定直辖市区的女性
+        for(int i=0;i<10;i++){
+            String newIdCard = IdCardUtils.fakeId(true,"静安区",2019,3,15,0);
+            System.out.println(newIdCard);
+            System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+        }
+    }
+
+```
 
 
 ### 升级身份证号码
 15 位号码升级为 18 位：
 
+```java
+ @Test
+    public void testUpgradeId(){
+        System.out.println(IdCardUtils.getIdCardInfo("610104620927690"));
+        String newIdCard = IdCardUtils.upgradeId("610104620927690");
+        System.out.println(newIdCard);
+        System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+
+    }
+
+```
 
 ## 参考资料
 
