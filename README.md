@@ -24,7 +24,7 @@ Chinese Mainland Personal ID Card Validation
   <dependency>
     <groupId>io.github.Feiyizhan</groupId>
     <artifactId>id-validator</artifactId>
-    <version>1.0</version>
+    <version>1.2</version>
   </dependency>
 ```
 
