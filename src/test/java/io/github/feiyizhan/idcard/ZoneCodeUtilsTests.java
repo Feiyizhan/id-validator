@@ -11,7 +11,23 @@ public class ZoneCodeUtilsTests {
 
     @Test
     public void testGetZoneFullDescription(){
-        String fullDescription = ZoneCodeUtils.getZoneFullDescription("622627","-");
+        String fullDescription = ZoneCodeUtils.getZoneFullDescription("310106","-");
         System.out.println(fullDescription);
+    }
+
+    @Test
+    public void testGetRandomZoneCode(){
+        for(int i=0;i<20;i++){
+            System.out.println(ZoneCodeUtils.getRandomZoneCode("广东省"));
+        }
+        for(int i=0;i<20;i++){
+            System.out.println(ZoneCodeUtils.getRandomZoneCode("上海市"));
+        }
+        for(int i=0;i<20;i++){
+            System.out.println(ZoneCodeUtils.getRandomZoneCode("台湾省"));
+        }
+        for(int i=0;i<20;i++){
+            System.out.println(ZoneCodeUtils.getRandomZoneCode("测试省"));
+        }
     }
 }

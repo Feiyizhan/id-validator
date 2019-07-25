@@ -1,7 +1,12 @@
 package io.github.feiyizhan.idcard.data;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 当前区域编码数据
@@ -22,6 +27,42 @@ public class CurrentZoneCodeData {
      * @author 徐明龙 XuMingLong 2019-07-23
      */
     final static Map<String, String> CURRENT_ZONE_CODE_MAP = new LinkedHashMap<>();
+
+    /**
+     * 当前地址编码Map
+     * @author 徐明龙 XuMingLong 2019-07-23
+     */
+    final static Map<String, String> CURRENT_ADDRESS_MAP = new LinkedHashMap<>();
+
+    /**
+     * 当前区域编码List
+     * @author 徐明龙 XuMingLong 2019-07-25
+     */
+    final static List<String> CURRENT_ZONE_CODE_LIST = new ArrayList<>();
+
+    /**
+     * 当前省区域编码List
+     * @author 徐明龙 XuMingLong 2019-07-25
+     */
+    final static List<String> CURRENT_PROVINCE_ZONE_CODE_LIST = new ArrayList<>();
+
+    /**
+     * 当前省下的市的区域编码Map
+     * @author 徐明龙 XuMingLong 2019-07-25
+     */
+    final static Map<String,List<String>> CURRENT_PROVINCE_CITY_ZONE_CODE_MAP = new LinkedHashMap<>();
+
+    /**
+     * 当前省下的区县的区域编码Map
+     * @author 徐明龙 XuMingLong 2019-07-25
+     */
+    final static Map<String,List<String>> CURRENT_PROVINCE_COUNTY_ZONE_CODE_MAP = new LinkedHashMap<>();
+
+    /**
+     * 当前市下的区县的区域编码Map
+     * @author 徐明龙 XuMingLong 2019-07-25
+     */
+    final static Map<String,List<String>> CURRENT_CITY_COUNTY_ZONE_CODE_MAP = new LinkedHashMap<>();
 
     /**
      * 初始化区域编码信息
@@ -3246,5 +3287,70 @@ public class CurrentZoneCodeData {
         CURRENT_ZONE_CODE_MAP.put("710000", "台湾省");
         CURRENT_ZONE_CODE_MAP.put("810000", "香港特别行政区");
         CURRENT_ZONE_CODE_MAP.put("820000", "澳门特别行政区");
+
+        //设置地址Map
+        CURRENT_ZONE_CODE_MAP.entrySet().forEach(r->{
+            CURRENT_ADDRESS_MAP.put(r.getValue(),r.getKey());
+        });
+
+        //设置所有区域编码列表
+        CURRENT_ZONE_CODE_LIST.addAll(CURRENT_ZONE_CODE_MAP.keySet());
+        //设置所有省区域编码列表
+        CURRENT_PROVINCE_ZONE_CODE_LIST.addAll(
+            CURRENT_ZONE_CODE_LIST.stream().filter(r->r.substring(2).equals("0000")).collect(Collectors.toList())
+        );
+        //获取市区域编码Map，Key为省的前2位
+        LinkedHashMap<String,List<String>> cityMap = CURRENT_ZONE_CODE_LIST.stream()
+            .filter(r->!r.substring(2).equals("0000") && r.substring(4).equals("00"))
+            .collect(Collectors.groupingBy(
+                r->r.substring(0,2),
+                LinkedHashMap::new,
+                Collectors.toList()
+            ));
+        //获取县区域编码Map Key为市的前4位
+        LinkedHashMap<String,List<String>> countyMap = CURRENT_ZONE_CODE_LIST.stream()
+            .filter(r->!r.substring(4).equals("00"))
+            .collect(Collectors.groupingBy(
+                r->r.substring(0,4),
+                LinkedHashMap::new,
+                Collectors.toList()
+            ));
+        //获取县区域编码Map Key为省的前2位
+        LinkedHashMap<String,List<String>> provinceCountyMap = CURRENT_ZONE_CODE_LIST.stream()
+            .filter(r->!r.substring(4).equals("00"))
+            .collect(Collectors.groupingBy(
+                r->r.substring(0,2),
+                LinkedHashMap::new,
+                Collectors.toList()
+            ));
+        //设置省市区域编码Map
+        CURRENT_PROVINCE_ZONE_CODE_LIST.forEach(
+            r->{
+                List<String> cityList = cityMap.get(r.substring(0,2));
+                if(CollectionUtils.isEmpty(cityList)){
+                    //修正直辖市没有市的问题
+                    CURRENT_PROVINCE_CITY_ZONE_CODE_MAP.put(r,provinceCountyMap.get(r.substring(0,2)));
+                }else{
+                    CURRENT_PROVINCE_CITY_ZONE_CODE_MAP.put(r,cityList);
+                }
+            }
+        );
+
+        //设置省下的区县的区域编码Map
+        CURRENT_PROVINCE_ZONE_CODE_LIST.forEach(
+            r->{
+                CURRENT_PROVINCE_COUNTY_ZONE_CODE_MAP.put(r,provinceCountyMap.get(r.substring(0,2)));
+            }
+        );
+
+        //设置市县区域编码Map
+        CURRENT_ZONE_CODE_LIST.stream()
+            .filter(r->!r.substring(2).equals("0000") && r.substring(4).equals("00"))
+            .forEach(
+            r->{
+                CURRENT_CITY_COUNTY_ZONE_CODE_MAP.put(r,countyMap.get(r.substring(0,4)));
+            }
+        );
+
     }
 }

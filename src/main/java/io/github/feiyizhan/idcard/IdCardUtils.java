@@ -1,10 +1,11 @@
 package io.github.feiyizhan.idcard;
 
 import io.github.feiyizhan.idcard.data.ZoneCodeUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -54,6 +55,76 @@ public class IdCardUtils {
     private static final LocalDate MIN_DATE = convertToDate("19000101",DATE_FORMAT_1);
 
     /**
+     * 生成可通过校验的假数据
+     * <p>
+     * is18Bit 是否生成 18 位号码，默认为 true,false生成15位号码;
+     * <p>
+     * address 地址，即省市县三级地区官方全称，如北京市、台湾省、香港特别行政区、深圳市、黄浦区等，
+     * 可以只提供省或者市，将会取省或市下随机的区县，默认或参数非法，则生成合法的随机地址；
+     * <p>
+     * year 出生日期-年，合法的值为1900~本年，默认或参数非法，则随机取1900~本年的年；
+     * <p>
+     * month 出生日期-月,合法的值为1-12，默认或参数非法，则随机取1~12的月；
+     * <p>
+     * day 出生日期-日,合法的值为1-31, 默认或参数非法，则随机取1~31的日；
+     * 如果是随机到的月或者指定的月为2月份：
+     * <p>
+     *  1、如果没有指定日，则随机生成有效的2月份的日期
+     *  2、如果指定了日，但指定的日不是2月份有效的日期，则随机生成有效的2月份的日期
+     *  3、如果指定了日期，器指定的日是2月份有效的日期，使用该日期
+     * <p>
+     * sex 性别，1为男，0为女，默认或参数非法，则生成合法的随机性别；
+     * @author 徐明龙 XuMingLong 2019-07-25
+     * @param is18Bit 是否生成 18 位号码
+     * @param address 地址，即省市县三级地区官方全称
+     * @param year 出生日期-年
+     * @param month 出生日期-月
+     * @param day 出生日期-日
+     * @param sex 性别
+     * @return java.lang.String
+     */
+    public static String fakeId(Boolean is18Bit,String address,Integer year,Integer month,Integer day,Integer sex ){
+        //设置长度
+        int length = BooleanUtils.isNotFalse(is18Bit)?18:15;
+        //获取区域编码
+        String zoneCode = ZoneCodeUtils.getRandomZoneCode(address);
+        //获取出生日期
+        LocalDate birthday = DateUtils.getRandomDate(year,month,day);
+        //获取顺序码
+        int sequenceCode = RandomUtils.nextInt(1,999);
+        sex = sex==null || (sex >1 && sex <0) ? RandomUtils.nextInt(0,2):sex;
+        int evenOrOdd = (sequenceCode&1);
+        if(sex == 1 && evenOrOdd == 1 ){
+            //需要偶数，但随机到奇数
+            sequenceCode+=1;
+        }else if(sex==0 && evenOrOdd == 0){
+            //需要奇数，但随机到偶数
+            sequenceCode+=1;
+        }
+        //计算校验码
+        StringBuilder sb = new StringBuilder();
+        sb.append(zoneCode);
+        if(length==15){
+            sb.append(birthday.format(DATE_FORMAT_1).substring(2));
+        }else{
+            sb.append(birthday.format(DATE_FORMAT_1));
+        }
+        sb.append(String.format("%03d",sequenceCode));
+        //转换为字符数组
+        if(length==18){
+            final char[] idCardArray = new char[18];
+            sb.getChars(0,17,idCardArray,0);
+            sb.setLength(0);
+            //获取校验码
+            idCardArray[17] = getParityBit(idCardArray);
+            return new String(idCardArray);
+        }else{
+            return sb.toString();
+        }
+    }
+
+
+    /**
      * 升级15位身份证为18位，如果已经是18位身份证，直接返回，如果身份证校验失败，返回null
      * @author 徐明龙 XuMingLong 2019-07-25
      * @param idCard 身份证号码
@@ -69,6 +140,7 @@ public class IdCardUtils {
 
         /*
          * 升级算法为: 出生日期转换为8位的日期，再重新计算出校验位
+         * <p>
          * 6位日期转换为8位日期时，前两位的年设置为19，因此对于1900年之前的出生的人身份证会处理结果会不正确，现在应该没有19世纪的人了吧:-)
          */
         //先升级为17
@@ -78,14 +150,8 @@ public class IdCardUtils {
         final char[] idCardArray = new char[18];
         sb.getChars(0,17,idCardArray,0);
         sb.setLength(0);
-        //计算校验位
-        int sumPower = 0;
-        for (int i = 0; i < 17; i++) {
-            sumPower += (idCardArray[i] - '0') * POWER_LIST[i];
-        }
         //获取校验码
-        idCardArray[17] = PARITY_BIT[sumPower % 11];
-
+        idCardArray[17] = getParityBit(idCardArray);
         return new String(idCardArray);
     }
 
@@ -254,16 +320,6 @@ public class IdCardUtils {
         return idCard.length()==18?idCard.substring(6, 14):String.join("","19",idCard.substring(6, 12));
     }
 
-
-    /**
-     * 获取东八区的当前日期
-     * @author 徐明龙 XuMingLong 2019-07-23
-     * @return java.time.LocalDate
-     */
-    private static LocalDate getToday(){
-        return LocalDate.now(ZoneId.of("UTC+8"));
-    }
-
     /**
      * 检查出生日期，校验日期,日期必须有效，且不能大于当天，不能小于1900-01-01
      * @author 徐明龙 XuMingLong 2019-07-23
@@ -291,10 +347,20 @@ public class IdCardUtils {
         return year2bit;
     }
 
-    public static void main(String[] args) {
-        System.out.println(LocalDate.now().get(ChronoField.MONTH_OF_YEAR));
-        System.out.println(LocalDate.now().get(ChronoField.DAY_OF_MONTH));
-        System.out.println(LocalDate.now().get(ChronoField.DAY_OF_YEAR));
+    /**
+     * 获取校验码
+     * @author 徐明龙 XuMingLong 2019-07-25
+     * @param idCardArray
+     * @return char
+     */
+    private static char getParityBit(final char[] idCardArray){
+        //计算校验位
+        int sumPower = 0;
+        for (int i = 0; i < 17; i++) {
+            sumPower += (idCardArray[i] - '0') * POWER_LIST[i];
+        }
+        //获取校验码
+        return PARITY_BIT[sumPower % 11];
     }
 
 }
