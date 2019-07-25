@@ -53,6 +53,42 @@ public class IdCardUtils {
      */
     private static final LocalDate MIN_DATE = convertToDate("19000101",DATE_FORMAT_1);
 
+    /**
+     * 升级15位身份证为18位，如果已经是18位身份证，直接返回，如果身份证校验失败，返回null
+     * @author 徐明龙 XuMingLong 2019-07-25
+     * @param idCard 身份证号码
+     * @return java.lang.String
+     */
+    public static String upgradeId(String idCard){
+        if(!isValid(idCard)){
+            return null;
+        }
+        if(idCard.length()==18){
+            return idCard;
+        }
+
+        /*
+         * 升级算法为: 出生日期转换为8位的日期，再重新计算出校验位
+         * 6位日期转换为8位日期时，前两位的年设置为19，因此对于1900年之前的出生的人身份证会处理结果会不正确，现在应该没有19世纪的人了吧:-)
+         */
+        //先升级为17
+        StringBuilder sb = new StringBuilder();
+        sb.append(idCard.substring(0,6)).append("19").append(idCard.substring(6));
+        //转换为字符数组
+        final char[] idCardArray = new char[18];
+        sb.getChars(0,17,idCardArray,0);
+        sb.setLength(0);
+        //计算校验位
+        int sumPower = 0;
+        for (int i = 0; i < 17; i++) {
+            sumPower += (idCardArray[i] - '0') * POWER_LIST[i];
+        }
+        //获取校验码
+        idCardArray[17] = PARITY_BIT[sumPower % 11];
+
+        return new String(idCardArray);
+    }
+
 
     /**
      * 获取身份证信息，如果身份证无效返回null
@@ -87,7 +123,10 @@ public class IdCardUtils {
         //获取星座
         String constellation = ConstellationUtils.getConstellationByMonthAndDay(birthdayStr.substring(4));
         //获取校验码
-        String checkBit = idCard.substring(length-1).toUpperCase();
+        String checkBit = null;
+        if(length==18){
+            checkBit = idCard.substring(length-1).toUpperCase();
+        }
         //判断是否废弃
         boolean abandoned = !ZoneCodeUtils.isExistedInCurrent(zoneCode);
         IdCardInfo info = IdCardInfo.builder()
@@ -135,6 +174,15 @@ public class IdCardUtils {
      * @return boolean
      */
     private static boolean isValid_15(String idCard){
+
+        //转换为字符数组
+        final char[] idCardArray = idCard.toCharArray();
+        for (int i = 0; i < idCardArray.length; i++) {
+            if (idCardArray[i] < '0' || idCardArray[i] > '9'){
+                return false;
+            }
+        }
+
         //校验区位码
         String zoneCode = idCard.substring(0, 6);
         if(!ZoneCodeUtils.isExisted(zoneCode)){
@@ -160,10 +208,12 @@ public class IdCardUtils {
         //检查每一位的是否有效，并计算前17位的权和
         int sumPower = 0;
         for (int i = 0; i < idCardArray.length; i++) {
-            if (i == idCardArray.length - 1 && idCardArray[i] == 'X')
-                break;//最后一位可以 是X或x
-            if (idCardArray[i] < '0' || idCardArray[i] > '9')
+            if (i == idCardArray.length - 1 && idCardArray[i] == 'X'){
+                break;
+            }
+            if (idCardArray[i] < '0' || idCardArray[i] > '9'){
                 return false;
+            }
             if (i < idCardArray.length - 1) {
                 sumPower += (idCardArray[i] - '0') * POWER_LIST[i];
             }

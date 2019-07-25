@@ -21,4 +21,13 @@ public class IdCardUtilsTests {
     public void testGetIdCardInfo(){
         System.out.println(IdCardUtils.getIdCardInfo("13053519860730352X"));
     }
+
+    @Test
+    public void testUpgradeId(){
+        System.out.println(IdCardUtils.getIdCardInfo("610104620927690"));
+        String newIdCard = IdCardUtils.upgradeId("610104620927690");
+        System.out.println(newIdCard);
+        System.out.println(IdCardUtils.getIdCardInfo(newIdCard));
+
+    }
 }
