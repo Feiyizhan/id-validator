@@ -14,11 +14,12 @@ public class IdCardUtilsTests {
 
     @Test
     public void testValidIdCard(){
-        Assert.assertTrue(IdCardUtils.isValid("13053519860730352X"));
+        Assert.assertTrue(IdCardUtils.isValid("130223198605246136"));
     }
 
     @Test
     public void testGetIdCardInfo(){
+        System.out.println(IdCardUtils.getIdCardInfo("130223198605246136"));
         System.out.println(IdCardUtils.getIdCardInfo("13053519860730352X"));
         System.out.println(IdCardUtils.getIdCardInfo("511123410630163"));
         System.out.println(IdCardUtils.getIdCardInfo("140830201911296054"));

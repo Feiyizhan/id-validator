@@ -6,7 +6,7 @@
 
     <groupId>io.github.Feiyizhan</groupId>
     <artifactId>id-validator</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
     <name>id-validator</name>
     <description>中华人民共和国居民身份证、中华人民共和国港澳居民居住证以及中华人民共和国台湾居民居住证号码验证工具</description>
     <url>https://github.com/Feiyizhan/id-validator</url>

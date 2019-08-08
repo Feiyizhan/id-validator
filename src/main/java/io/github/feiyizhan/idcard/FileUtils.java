@@ -1,9 +1,7 @@
 package io.github.feiyizhan.idcard;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 文件工具类
@@ -11,20 +9,13 @@ import java.net.URLDecoder;
  **/
 public class FileUtils {
 
-    public static File getFile(String fileName){
-
-        File file= new File(fileName);
-        if(file.exists()) {
-            return file;
-        }
-        URL url = FileUtils.class.getClassLoader().getResource(fileName);
-        if(url!=null){
-            try {
-                fileName = URLDecoder.decode(url.getFile(),"UTF-8");
-            } catch (UnsupportedEncodingException e) {}
-        }
-
-        file= new File(fileName);
-        return file;
+    /**
+     * 获取输入流
+     * @author 徐明龙 XuMingLong 2019-08-08
+     * @param fileName 文件名
+     * @return java.io.InputStream
+     */
+    public static InputStream getInputStream(String fileName) throws IOException {
+        return FileUtils.class.getClassLoader().getResource(fileName).openStream();
     }
 }

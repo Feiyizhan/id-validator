@@ -8,11 +8,9 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +41,8 @@ public class HistoryZoneCodeData {
 
     static{
         //加载数据
-        try (FileChannel fc = new FileInputStream(FileUtils.getFile("history_zone_code_data_201905.json")).getChannel()) {
-            ByteBuffer buff = ByteBuffer.allocate((int) fc.size());
-            fc.read(buff);
-            buff.flip();
-            String str = new String(buff.array(), "utf-8");
+        try (InputStream is = FileUtils.getInputStream("history_zone_code_data_201905.json")) {
+            String str = new String(is.readAllBytes(), "utf-8");
             LinkedHashMap<String, List<ZoneCodeData>> dataMap = JsonUtils.JsonToObject(str, new TypeReference<LinkedHashMap<String, List<ZoneCodeData>>>() {});
             for (Map.Entry<String,List<ZoneCodeData>> e : dataMap.entrySet()){
                 for(ZoneCodeData z:e.getValue()){
