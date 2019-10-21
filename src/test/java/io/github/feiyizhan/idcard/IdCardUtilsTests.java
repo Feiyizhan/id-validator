@@ -23,6 +23,7 @@ public class IdCardUtilsTests {
         System.out.println(IdCardUtils.getIdCardInfo("13053519860730352X"));
         System.out.println(IdCardUtils.getIdCardInfo("511123410630163"));
         System.out.println(IdCardUtils.getIdCardInfo("140830201911296054"));
+        System.out.println(IdCardUtils.getIdCardInfo("422824199511307158"));
 
     }
 

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -175,8 +176,14 @@ public class ZoneCodeUtils {
         if(description!=null){
             return description;
         }
-
-        return Optional.ofNullable(HISTORY_ZONE_CODE_MAP.get(zoneCode)).map(r->
+        Map<Integer, HistoryZoneCodeData.ZoneCodeData> historyZoneCodeMap =  HISTORY_ZONE_CODE_MAP.get(zoneCode);
+        if(historyZoneCodeMap==null){
+            return null;
+        }
+        if(historyZoneCodeMap.size()==1){
+            return historyZoneCodeMap.values().stream().findFirst().map(r->r.getAddress()).orElse(null);
+        }
+        return Optional.ofNullable(historyZoneCodeMap).map(r->
             r.values().stream()
                 .filter(v->v.getEndYear() >=year && v.getStartYear() <=year)
                 .findFirst().map(i->i.getAddress()).orElse(null)
