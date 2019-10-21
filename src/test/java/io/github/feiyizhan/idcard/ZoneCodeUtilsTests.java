@@ -11,7 +11,7 @@ public class ZoneCodeUtilsTests {
 
     @Test
     public void testGetZoneFullDescription(){
-        String fullDescription = ZoneCodeUtils.getZoneFullDescription("310106","-");
+        String fullDescription = ZoneCodeUtils.getZoneFullDescription("362502","-");
         System.out.println(fullDescription);
     }
 

@@ -22497,10 +22497,12 @@
       "address": "抚州市",
       "start_year": 1982,
       "end_year": 1986
-    },
+    }
+  ],
+  "362502": [
     {
       "address": "临川市",
-      "start_year": 1987,
+      "start_year": "",
       "end_year": 1999
     }
   ],

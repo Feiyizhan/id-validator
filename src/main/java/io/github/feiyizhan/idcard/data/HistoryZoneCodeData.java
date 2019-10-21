@@ -3,9 +3,7 @@ package io.github.feiyizhan.idcard.data;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.github.feiyizhan.idcard.FileUtils;
 import io.github.feiyizhan.idcard.JsonUtils;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.FileNotFoundException;
@@ -42,8 +40,7 @@ public class HistoryZoneCodeData {
     static{
         //加载数据
         try (InputStream is = FileUtils.getInputStream("history_zone_code_data_201905.json")) {
-            String str = new String(is.readAllBytes(), "utf-8");
-            LinkedHashMap<String, List<ZoneCodeData>> dataMap = JsonUtils.JsonToObject(str, new TypeReference<LinkedHashMap<String, List<ZoneCodeData>>>() {});
+            LinkedHashMap<String, List<ZoneCodeData>> dataMap = JsonUtils.JsonToObject(is, new TypeReference<LinkedHashMap<String, List<ZoneCodeData>>>() {});
             for (Map.Entry<String,List<ZoneCodeData>> e : dataMap.entrySet()){
                 for(ZoneCodeData z:e.getValue()){
                     z.setCode(e.getKey());
@@ -70,7 +67,7 @@ public class HistoryZoneCodeData {
      * 区域数据对象
      * @author 徐明龙 XuMingLong 2019-07-23
      */
-    @Getter@Setter@ToString
+    @Data
     public static class ZoneCodeData{
         String code;
         String address;

@@ -2,7 +2,9 @@ package io.github.feiyizhan.idcard;
 
 import org.apache.commons.lang3.Range;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 星座信息
@@ -10,27 +12,31 @@ import java.util.*;
  **/
 public class ConstellationUtils {
 
+    private ConstellationUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 星座Map
      */
-    final static Map<Range<String>,String> CONSTELLATION_MAP = new HashMap<>(){
-        {
-            put(Range.between("01-20","02-18"),"水瓶座");
-            put(Range.between("02-19","03-20"),"双鱼座");
-            put(Range.between("03-21","04-19"),"白羊座");
-            put(Range.between("04-20","05-20"),"金牛座");
-            put(Range.between("05-21","06-21"),"双子座");
-            put(Range.between("06-22","07-22"),"巨蟹座");
-            put(Range.between("07-23","08-22"),"狮子座");
-            put(Range.between("08-23","09-22"),"处女座");
-            put(Range.between("09-23","10-23"),"天秤座");
-            put(Range.between("10-24","11-22"),"天蝎座");
-            put(Range.between("11-23","12-21"),"射手座");
-            put(Range.between("12-22","01-19",
-                    getComparator("12-22","01-19","01-01","12-31")),
-                "摩羯座");
-        }
-    };
+    private final static Map<Range<String>,String> CONSTELLATION_MAP = new HashMap<>();
+    static{
+
+        CONSTELLATION_MAP.put(Range.between("01-20","02-18"),"水瓶座");
+        CONSTELLATION_MAP.put(Range.between("02-19","03-20"),"双鱼座");
+        CONSTELLATION_MAP.put(Range.between("03-21","04-19"),"白羊座");
+        CONSTELLATION_MAP.put(Range.between("04-20","05-20"),"金牛座");
+        CONSTELLATION_MAP.put(Range.between("05-21","06-21"),"双子座");
+        CONSTELLATION_MAP.put(Range.between("06-22","07-22"),"巨蟹座");
+        CONSTELLATION_MAP.put(Range.between("07-23","08-22"),"狮子座");
+        CONSTELLATION_MAP.put(Range.between("08-23","09-22"),"处女座");
+        CONSTELLATION_MAP.put(Range.between("09-23","10-23"),"天秤座");
+        CONSTELLATION_MAP.put(Range.between("10-24","11-22"),"天蝎座");
+        CONSTELLATION_MAP.put(Range.between("11-23","12-21"),"射手座");
+        CONSTELLATION_MAP.put(Range.between("12-22","01-19",
+            getComparator("12-22","01-19","01-01","12-31")),
+            "摩羯座");
+    }
 
 
     /**
@@ -42,6 +48,7 @@ public class ConstellationUtils {
      * @param roundEnd 环形数据的结束值
      * @return java.util.Comparator<T>
      */
+    @SuppressWarnings("unchecked")
     private static <T extends Comparable<? super T>> Comparator<T> getComparator(T begin,T end,T roundBegin,T roundEnd){
         //不是环形数据比较器，直接返回空
         if(roundBegin==null ||roundEnd ==null ){
