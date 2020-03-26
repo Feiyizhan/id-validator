@@ -18,6 +18,13 @@ public class IdCardUtilsTests {
     }
 
     @Test
+    public void testValidIdCardWithDoNotVerifyRegionCode(){
+        Assert.assertTrue(IdCardUtils.isValidWithDoNotVerifyRegionCode("130223198605246136"));
+        Assert.assertFalse(IdCardUtils.isValid("440301199508290949"));
+        Assert.assertTrue(IdCardUtils.isValidWithDoNotVerifyRegionCode("440301199508290949"));
+    }
+
+    @Test
     public void testGetIdCardInfo(){
         System.out.println(IdCardUtils.getIdCardInfo("130223198605246136"));
         System.out.println(IdCardUtils.getIdCardInfo("13053519860730352X"));

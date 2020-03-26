@@ -24,13 +24,17 @@ Chinese Mainland Personal ID Card Validation
   <dependency>
     <groupId>io.github.Feiyizhan</groupId>
     <artifactId>id-validator</artifactId>
-    <version>1.5</version>
+    <version>1.8</version>
   </dependency>
 ```
 
 ### 验证身份证号合法性
 
 验证身份证号是否合法，合法返回 `true`，不合法返回 `false`：
+
+#### 验证地区编号
+
+不推荐使用，因为国内的地区编号一直在变，而且找不到一个当前最新最完整的地区编码库。
 
 ```java
 public class IdCardUtilsTests {
@@ -40,6 +44,16 @@ public class IdCardUtilsTests {
         Assert.assertTrue(IdCardUtils.isValid("13053519860730352X"));
     }
 }
+```
+#### 不验证地区编号
+
+```java
+    @Test
+    public void testValidIdCardWithDoNotVerifyRegionCode(){
+        Assert.assertTrue(IdCardUtils.isValidWithDoNotVerifyRegionCode("130223198605246136"));
+        Assert.assertFalse(IdCardUtils.isValid("440301199508290949"));
+        Assert.assertTrue(IdCardUtils.isValidWithDoNotVerifyRegionCode("440301199508290949"));
+    }
 ```
 
 ### 获取身份证号信息

@@ -216,20 +216,42 @@ public class IdCardUtils {
 
 
     /**
+     * 校验身份证号是否有效，支持15位和18位身份证,不验证地区编号，因为地区编号数据目前没有一个准确的数据源
+     * @author 徐明龙 XuMingLong 2020-03-26
+     * @param idCard 身份证号码
+     * @return boolean
+     */
+    public static boolean isValidWithDoNotVerifyRegionCode(String idCard){
+        //先校验身份证号长度
+        
+        if (idCard == null || (idCard.length() != 15 && idCard.length() != 18)){
+            return false;
+        }
+        if(idCard.length()==15){
+            return isValid_15(idCard,false);
+        }else{
+            return isValid_18(idCard,false);
+        }
+
+    }
+
+
+    /**
      * 校验身份证号是否有效，支持15位和18位身份证
      * @author 徐明龙 XuMingLong 2019-07-23
      * @param idCard 身份证号码
      * @return boolean
      */
+    @Deprecated
     public static boolean isValid(String idCard){
         //先校验身份证号长度
-        if (idCard == null || (idCard.length() != 15 && idCard.length() != 18))
+        if (idCard == null || (idCard.length() != 15 && idCard.length() != 18)){
             return false;
-
+        }
         if(idCard.length()==15){
-            return isValid_15(idCard);
+            return isValid_15(idCard,true);
         }else{
-            return isValid_18(idCard);
+            return isValid_18(idCard,true);
         }
 
     }
@@ -238,9 +260,10 @@ public class IdCardUtils {
      * 校验15位身份证号码
      * @author 徐明龙 XuMingLong 2019-07-23
      * @param idCard 身份证号码
+     * @param verifyRegionCode  是否验证地区编号
      * @return boolean
      */
-    private static boolean isValid_15(String idCard){
+    private static boolean isValid_15(String idCard,boolean verifyRegionCode){
 
         //转换为字符数组
         final char[] idCardArray = idCard.toCharArray();
@@ -251,9 +274,11 @@ public class IdCardUtils {
         }
 
         //校验区位码
-        String zoneCode = idCard.substring(0, 6);
-        if(!ZoneCodeUtils.isExisted(zoneCode)){
-            return false;
+        if(verifyRegionCode){
+            String zoneCode = idCard.substring(0, 6);
+            if(!ZoneCodeUtils.isExisted(zoneCode)){
+                return false;
+            }
         }
         //校验日期
         if(!checkBirthDay(getBirthday(idCard))){
@@ -266,9 +291,10 @@ public class IdCardUtils {
      * 校验18位身份证号码
      * @author 徐明龙 XuMingLong 2019-07-23
      * @param idCard 身份证号码
+     * @param verifyRegionCode  是否验证地区编号
      * @return boolean
      */
-    private static boolean isValid_18(String idCard){
+    private static boolean isValid_18(String idCard,boolean verifyRegionCode){
         //转换为大写的字符数组
         final char[] idCardArray = idCard.toUpperCase().toCharArray();
 
@@ -287,9 +313,11 @@ public class IdCardUtils {
         }
 
         //校验区位码
-        String zoneCode = idCard.substring(0, 6);
-        if(!ZoneCodeUtils.isExisted(zoneCode)){
-            return false;
+        if(verifyRegionCode){
+            String zoneCode = idCard.substring(0, 6);
+            if(!ZoneCodeUtils.isExisted(zoneCode)){
+                return false;
+            }
         }
 
         //校验日期,日期必须有效，且不能大于当天，不能小于1900-01-01
